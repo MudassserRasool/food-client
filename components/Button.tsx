@@ -44,6 +44,7 @@ export const Button: React.FC<ButtonProps> = ({
           color: theme === 'light' ? Colors.dark.text : Colors.light.text,
           display: 'flex',
           gap: 5,
+          textAlign: 'center',
         }}
       >
         {icon}

@@ -4,16 +4,13 @@ import { FormData, HandleInputChange } from '@/components/interfaces';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import ROLES from '@/constants/roles';
-import ROUTES from '@/constants/routes';
 import globalStyle from '@/style/globalStyle';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import styles from '../Auth.style';
 
-const Login = () => {
+const ResetPassword = () => {
   const [formData, setFormData] = useState<FormData>({});
-  const { loginType } = useLocalSearchParams();
 
   const handleInputChange: HandleInputChange = (fieldName, value) => {
     setFormData({ ...formData, [fieldName]: value });
@@ -23,53 +20,34 @@ const Login = () => {
     <ParallaxScrollView>
       <ThemedView style={globalStyle.authCenteredContent}>
         <ThemedText type="title" style={{ textAlign: 'center', marginTop: 30 }}>
-          LOGIN
+          RESET PASSWORD
         </ThemedText>
 
         <ThemedView style={[styles.formContainer, { marginTop: 50 }]}>
-          <InputField
-            onChange={handleInputChange}
-            label="Username/Email"
-            name="email"
-            value={formData.email}
-            placeholder="Enter username"
-          />
           <ThemedView>
             <InputField
               onChange={handleInputChange}
-              label="Password"
+              label="New Password"
               name="password"
               value={formData.password}
               type="password"
-              placeholder="Enter password"
+              placeholder="Enter new password"
             />
-            {loginType !== ROLES.RIDER && (
-              <ThemedText
-                href={ROUTES.FORGET_PASSWORD}
-                type="link"
-                style={{ textAlign: 'right' }}
-              >
-                Forgot Password?
-              </ThemedText>
-            )}
+            <InputField
+              onChange={handleInputChange}
+              label="Re-enter Password"
+              name="reEnterPassword"
+              value={formData.reEnterPassword}
+              type="password"
+              placeholder="Re-enter password"
+            />
           </ThemedView>
 
-          <Button>Login</Button>
+          <Button style={{ marginTop: 40 }}>Save Changes</Button>
         </ThemedView>
-        {loginType !== ROLES.RIDER && (
-          <ThemedText type="gray" style={{ textAlign: 'center' }}>
-            Don’t have an account?{' '}
-            <ThemedText
-              onPress={() => router.push(ROUTES.SIGNUP)}
-              type="defaultSemiBold"
-            >
-              Sign Up
-            </ThemedText>
-          </ThemedText>
-        )}
       </ThemedView>
     </ParallaxScrollView>
   );
 };
 
-export default Login;
+export default ResetPassword;
