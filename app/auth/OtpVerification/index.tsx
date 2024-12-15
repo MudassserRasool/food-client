@@ -77,7 +77,6 @@ const OtpVerification = () => {
         <Button
           onPress={() => {
             router.push(ROUTES.RESET_PASSWORD);
-            console.log(ROUTES.RESET_PASSWORD);
             router.setParams({
               type,
               data,

@@ -11,6 +11,14 @@ const setTokenToStorage = async (token: string) => {
   }
 };
 
+const setRoleToStorage = async (role: string) => {
+  try {
+    await AsyncStorage.setItem('role', role);
+  } catch (error) {
+    console.error('Failed to save the role to storage:', error);
+  }
+};
+
 const removeTokenFromStorage = async () => {
   try {
     await AsyncStorage.removeItem('token');
@@ -28,10 +36,13 @@ const getTokenFromStorage = async () => {
     return null;
   }
 };
-
-const initialState = {
-  user: null,
-  token: null, // Will be initialized after retrieving from AsyncStorage
+interface AuthState {
+  token: string | null;
+  role: string | null;
+}
+const initialState: AuthState = {
+  token: null,
+  role: null,
 };
 
 // Define the slice
@@ -40,16 +51,17 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action) => {
-      const { user, token } = action.payload;
-      state.user = user;
+      const { user, token, role } = action.payload;
       state.token = token;
+      state.role = role;
 
       // Persist the token in AsyncStorage
       setTokenToStorage(token);
+      setRoleToStorage(role);
     },
     logout: (state) => {
-      state.user = null;
       state.token = null;
+      state.role = null;
 
       // Remove the token from AsyncStorage
       removeTokenFromStorage();

@@ -1,8 +1,34 @@
-import React from 'react';
+import { gestToken } from '@/constants';
+import ROLES from '@/constants/roles';
+import ROUTES from '@/constants/routes';
+import { initializeAuth } from '@/redux/features/auth/authSlice';
+import { useRouter } from 'expo-router';
+import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import StarterScreen from './auth/StarterScreen';
 
 const index = () => {
+  const { token, role } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  console.log('token', token);
+  console.log('role', role);
+  useEffect(() => {
+    dispatch(initializeAuth()); // Check for token on app load
+  }, [dispatch]);
+  useEffect(() => {
+    if (token) {
+      if (token === gestToken && role === ROLES.GEST) {
+        return router.push(ROUTES.CUSTOMER_HOME);
+      } else if (role === ROLES.CUSTOMER && token !== gestToken) {
+        return router.push(ROUTES.CUSTOMER_HOME);
+      } else if (role === ROLES.RIDER && token !== gestToken) {
+        return router.push(ROUTES.RIDER_HOME);
+      }
+    }
+  }, [token, role]);
+
   return <StarterScreen />;
 };
 

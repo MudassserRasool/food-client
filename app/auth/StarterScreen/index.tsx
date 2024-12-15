@@ -5,12 +5,26 @@ import { Button } from '@/components/Button';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
+import { gestToken } from '@/constants';
+import ROLES from '@/constants/roles';
 import ROUTES from '@/constants/routes';
+import { setCredentials } from '@/redux/features/auth/authSlice';
 import { Image } from 'expo-image';
+import { useDispatch } from 'react-redux';
 import styles from './StarterScreen.style';
 
 const StarterScreen = () => {
-  console.log(Images.StarterFood);
+  const dispatch = useDispatch();
+
+  const fakeResponse = {
+    token: gestToken,
+    role: ROLES.GEST, // Simple role logic
+  };
+
+  const handelGestLogin = () => {
+    dispatch(setCredentials(fakeResponse));
+  };
+
   return (
     <ThemedView style={styles.mainContainer}>
       <Image source={Images.StarterFood} style={styles.image} />
@@ -26,7 +40,7 @@ const StarterScreen = () => {
         <Button href={ROUTES.SELECT_ROLE}>Login</Button>
 
         <Button href={ROUTES.SELECT_ROLE}>Sign Up</Button>
-        <Button onPress={() => {}}>Skip For Now</Button>
+        <Button onPress={handelGestLogin}>Skip For Now</Button>
       </ThemedView>
     </ThemedView>
   );
