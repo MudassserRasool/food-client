@@ -29,12 +29,12 @@ export const Button: React.FC<ButtonProps> = ({
         backgroundColor:
           theme === 'light' ? Colors.dark.background : Colors.light.background,
         padding: 12,
-        borderRadius: 6,
+        borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
         display: 'flex',
-        width: '95%',
-        marginHorizontal: 'auto',
+        width: '100%',
+        // marginHorizontal: 'auto',
         ...style,
       }}
     >
@@ -56,11 +56,11 @@ export const Button: React.FC<ButtonProps> = ({
         backgroundColor:
           theme === 'light' ? Colors.dark.background : Colors.light.background,
         padding: 12,
-        borderRadius: 6,
+        borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
         display: 'flex',
-        width: '95%',
+        width: '100%',
         marginHorizontal: 'auto',
         ...style,
       }}

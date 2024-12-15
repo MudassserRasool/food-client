@@ -2,22 +2,14 @@ import { Image, Platform, StyleSheet } from 'react-native';
 
 import { Button } from '@/components/Button';
 import { HelloWave } from '@/components/HelloWave';
-import InputField from '@/components/InputField';
-import { FormData, HandleInputChange } from '@/components/interfaces';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Link } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 export default function HomeScreen() {
-  const [formData, setFormData] = useState<FormData>({});
-
-  const handleInputChange: HandleInputChange = (fieldName, value) => {
-    setFormData({ ...formData, [fieldName]: value });
-  };
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
         <Image
           source={require('@/assets/images/partial-react-logo.png')}
@@ -68,16 +60,9 @@ export default function HomeScreen() {
           </ThemedText>
         </ThemedText>
       </ThemedView>
-      <InputField
-        placeholder="Enter email"
-        label="Email"
-        name="email"
-        value={formData.email}
-        error="Please enter"
-        onChange={handleInputChange}
-      />
 
-      <Button href="/auth/login">Button</Button>
+      <Button href="/auth/Login">Button</Button>
+      <Button href="/auth/LoginOrRegister">Button</Button>
     </ParallaxScrollView>
   );
 }

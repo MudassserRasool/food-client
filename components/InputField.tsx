@@ -2,8 +2,10 @@
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { Colors } from '@/constants/Colors';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import React from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -29,55 +31,68 @@ const InputField: React.FC<InputFieldProps> = ({
   style,
   lightColor,
   darkColor,
+  marginVertical = 3,
 }) => {
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
   const formattedStartDate = startDate
     ? new Date(startDate).toISOString().split('T')[0]
     : undefined;
   const theme = useColorScheme() ?? 'light';
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prev) => !prev);
+  };
+
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={{ marginVertical: marginVertical }}>
       {label && (
-        <ThemedText type="subtitle" style={styles.label}>
+        <ThemedText type="default" style={styles.label}>
           {label}
         </ThemedText>
       )}
       <View
         style={[
-          { color },
+          { color, borderColor: Colors.light.grayColor },
           styles.inputWrapper,
           disabled && styles.disabled,
-          //   {
-          //     backgroundColor: theme === 'light' ? '' : Colors.dark.background,
-          //   },
         ]}
       >
-        {icon && (
-          <TouchableOpacity style={styles.iconWrapper}>{icon}</TouchableOpacity>
-        )}
+        {icon && <View style={styles.iconWrapper}>{icon}</View>}
         <TextInput
           style={[styles.input, icon ? styles.withIcon : null]}
           placeholder={placeholder}
-          placeholderTextColor="#888"
+          placeholderTextColor={
+            theme === 'light'
+              ? Colors.light.placeholder
+              : Colors.dark.placeholder
+          }
           value={value}
           onChangeText={(text) => onChange(name, text)}
           keyboardType={type === 'number' ? 'numeric' : 'default'}
+          secureTextEntry={type === 'password' && !isPasswordVisible}
           maxLength={maxLength}
           editable={!disabled}
         />
+        {type === 'password' && (
+          <TouchableOpacity
+            onPress={togglePasswordVisibility}
+            style={styles.iconWrapper}
+          >
+            <Ionicons name={isPasswordVisible ? 'eye-off' : 'eye'} size={20} />
+          </TouchableOpacity>
+        )}
       </View>
       {error && (
-        <ThemedText type="subtitle" style={{ color: 'red' }}></ThemedText>
+        <ThemedText type="subtitle" style={{ color: 'red' }}>
+          {error}
+        </ThemedText>
       )}
     </ThemedView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginVertical: 10,
-  },
   label: {
     marginBottom: 5,
   },
@@ -85,16 +100,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
+    borderRadius: 12,
     backgroundColor: '#fff',
     overflow: 'hidden',
+    height: 44,
+    padding: 3,
   },
   iconWrapper: {
     paddingHorizontal: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f4f4f4',
   },
   input: {
     flex: 1,
@@ -113,3 +128,20 @@ const styles = StyleSheet.create({
 });
 
 export default InputField;
+
+/**
+ *   const [formData, setFormData] = useState<FormData>({});
+
+  const handleInputChange: HandleInputChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+   <InputField
+        placeholder="Enter email"
+        label="Email"
+        name="email"
+        value={formData.email}
+        error="Please enter"
+        onChange={handleInputChange}
+      />
+ */

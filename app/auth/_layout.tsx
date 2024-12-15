@@ -15,7 +15,7 @@ const AuthLayout = () => {
           </TouchableOpacity>
         ),
       }}
-    ></Stack>
+    />
   );
 };
 

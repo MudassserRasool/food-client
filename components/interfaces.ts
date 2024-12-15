@@ -4,7 +4,7 @@ export interface InputFieldProps {
   name: string;
   icon?: React.ReactNode;
   placeholder?: string;
-  type?: 'text' | 'number' | 'email' | 'date';
+  type?: 'text' | 'number' | 'email' | 'date' | 'password';
   value?: string;
   onChange?: (fieldName: string, value: string) => void;
   label?: string;
@@ -16,6 +16,7 @@ export interface InputFieldProps {
   style?: ViewStyle;
   lightColor?: string;
   darkColor?: string;
+  marginVertical?: number;
 }
 
 export interface FormData {

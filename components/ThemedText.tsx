@@ -1,11 +1,14 @@
+import { Colors } from '@/constants/Colors';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { Link } from 'expo-router'; // Replace with your routing library if different
 import React from 'react';
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
+  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link' | 'gray';
+  href?: string; // New prop for links
 };
 
 export function ThemedText({
@@ -13,29 +16,49 @@ export function ThemedText({
   lightColor,
   darkColor,
   type = 'default',
+  href,
+  onPress,
   ...rest
 }: ThemedTextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
 
+  // Shared styles for both Text and Link
+  const combinedStyles = [
+    { color },
+    type === 'default' ? styles.default : undefined,
+    type === 'title' ? styles.title : undefined,
+    type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
+    type === 'subtitle' ? styles.subtitle : undefined,
+    type === 'link' ? styles.link : undefined,
+    type === 'gray' ? styles.gray : undefined,
+    { fontFamily: 'Poppins' },
+    style,
+  ];
+  if (onPress) {
+    return (
+      <Text style={combinedStyles} onPress={onPress} {...rest}>
+        {rest.children}
+      </Text>
+    );
+  }
+  if (href) {
+    return (
+      <Link href={href} style={combinedStyles} {...rest}>
+        {rest.children}
+      </Link>
+    );
+  }
+
   return (
-    <Text
-      style={[
-        { color },
-        type === 'default' ? styles.default : undefined,
-        type === 'title' ? styles.title : undefined,
-        type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
-        type === 'subtitle' ? styles.subtitle : undefined,
-        type === 'link' ? styles.link : undefined,
-        style,
-      ]}
-      {...rest}
-    />
+    <Text style={combinedStyles} {...rest}>
+      {rest.children}
+    </Text>
   );
 }
 
 const styles = StyleSheet.create({
   default: {
-    fontSize: 16,
+    fontSize: 14,
     lineHeight: 24,
   },
   defaultSemiBold: {
@@ -52,9 +75,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
+  gray: {
+    fontSize: 14,
+    lineHeight: 24,
+    fontWeight: '500',
+    color: Colors.light.grayColor,
+  },
   link: {
     lineHeight: 30,
-    fontSize: 16,
-    color: '#0a7ea4',
+    fontSize: 14,
+    color: Colors.light.link,
+    textDecorationLine: 'underline',
   },
 });
