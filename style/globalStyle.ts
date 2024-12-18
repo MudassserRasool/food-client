@@ -9,6 +9,12 @@ const globalStyle = StyleSheet.create({
     width: '100%',
     gap: 50,
   },
+  userLayout: {
+    flex: 1,
+    gap: 15,
+    padding: 15,
+    paddingTop: 50,
+  },
 });
 
 export default globalStyle;

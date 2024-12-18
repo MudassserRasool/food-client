@@ -4,15 +4,19 @@ import { FormData, HandleInputChange } from '@/components/interfaces';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import ToastNotification from '@/components/ToastNotification/ToastNotification';
 import ROUTES from '@/constants/routes';
+import { useResendOtpMutation } from '@/redux/features/auth/authApi';
 import globalStyle from '@/style/globalStyle';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import styles from '../Auth.style';
 
 const ForgetPassword = () => {
+  const { verificationType, data } = useLocalSearchParams();
   const router = useRouter();
-  const [formData, setFormData] = useState<FormData>({});
+  const [resendOtp, { isLoading: resendOtpLoading }] = useResendOtpMutation();
+  const [formData, setFormData] = useState<FormData>({ email: data });
   // TYPE
   const [type, setType] = useState('email');
   // toggle between phone nd email
@@ -27,16 +31,29 @@ const ForgetPassword = () => {
     setIsPhone(!isPhone);
   };
 
-  const handleNext = () => {
-    router.push({
-      pathname: ROUTES.OTP_VERIFICATION,
-    });
+  const handleNext = async () => {
+    try {
+      const response = await resendOtp(formData?.[type]);
+      if (response.data?.status === 'success') {
+        ToastNotification.success(response?.data?.message, 'Otp sent');
+        router.push({
+          pathname: ROUTES.OTP_VERIFICATION,
+        });
 
-    router.setParams({
-      type,
-      data: formData[type],
-    });
+        router.setParams({
+          verificationMethod: 'email',
+          data: formData[type],
+          verificationType,
+        });
+      } else {
+        console.log(response);
+        throw new Error(response?.error?.data?.message);
+      }
+    } catch (error) {
+      ToastNotification.error(error.message, 'Otp resend failed');
+    }
   };
+
   // console.log('--------------------------');
   // console.log(formData);
   // console.log(formData[type]);
@@ -72,16 +89,18 @@ const ForgetPassword = () => {
               />
             )}
 
-            <ThemedText
+            {/* <ThemedText
               onPress={handleToggle}
               type="link"
               style={{ textAlign: 'right' }}
             >
               Try another method
-            </ThemedText>
+            </ThemedText> */}
           </ThemedView>
 
-          <Button onPress={handleNext}>Next</Button>
+          <Button isLoading={resendOtpLoading} onPress={handleNext}>
+            Next
+          </Button>
         </ThemedView>
       </ThemedView>
     </ParallaxScrollView>

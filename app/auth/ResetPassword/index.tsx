@@ -4,18 +4,52 @@ import { FormData, HandleInputChange } from '@/components/interfaces';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import ToastNotification from '@/components/ToastNotification/ToastNotification';
+import ROUTES from '@/constants/routes';
+import { useResetPasswordMutation } from '@/redux/features/auth/authApi';
 import globalStyle from '@/style/globalStyle';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import styles from '../Auth.style';
 
 const ResetPassword = () => {
+  const { otp, data } = useLocalSearchParams();
   const [formData, setFormData] = useState<FormData>({});
+  const [resetPassword, { isLoading: resetPasswordLoading }] =
+    useResetPasswordMutation();
 
   const handleInputChange: HandleInputChange = (fieldName, value) => {
     setFormData({ ...formData, [fieldName]: value });
   };
   const router = useRouter();
+
+  const handelResetPassword = async () => {
+    if (formData.password !== formData.reEnterPassword) {
+      ToastNotification.error('Passwords do not match', 'Password mismatch');
+      return;
+    }
+    const payload = {
+      password: formData.password,
+      email: data,
+      otp,
+    };
+    try {
+      const response = await resetPassword(payload);
+      if (response.data?.status === 'success') {
+        ToastNotification.success(
+          response?.data?.message,
+          'Password reset successful'
+        );
+        router.push(ROUTES.LOGIN);
+      } else {
+        console.log(response);
+        throw new Error(response?.error?.data?.message);
+      }
+    } catch (error) {
+      ToastNotification.error(error.message, 'Password reset failed');
+    }
+  };
+
   return (
     <ParallaxScrollView>
       <ThemedView style={globalStyle.authCenteredContent}>
@@ -43,7 +77,13 @@ const ResetPassword = () => {
             />
           </ThemedView>
 
-          <Button style={{ marginTop: 40 }}>Save Changes</Button>
+          <Button
+            isLoading={resetPasswordLoading}
+            onPress={handelResetPassword}
+            style={{ marginTop: 40 }}
+          >
+            Save Changes
+          </Button>
         </ThemedView>
       </ThemedView>
     </ParallaxScrollView>

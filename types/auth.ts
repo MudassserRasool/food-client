@@ -3,9 +3,13 @@ interface Login {
   password: string;
 }
 
-interface Register {
+interface Signup {
   email: string;
   password: string;
   name: string;
   phone?: string;
+}
+
+interface Otp {
+  otp: string;
 }

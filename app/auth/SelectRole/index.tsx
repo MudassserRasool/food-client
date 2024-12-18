@@ -21,7 +21,7 @@ const SelectRole = () => {
       <View style={styles.optionsContainer}>
         <TouchableOpacity
           style={styles.card}
-          onPress={() => router.push(ROUTES.SIGNUP)}
+          onPress={() => router.push(ROUTES.LOGIN)}
         >
           <Image source={Images.Customer} style={styles.icon} />
           <Text style={styles.cardText}>Customer</Text>

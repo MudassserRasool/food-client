@@ -4,7 +4,7 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Link } from 'expo-router';
 import React from 'react';
-import { TouchableOpacity, ViewStyle } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, ViewStyle } from 'react-native';
 import { ThemedText } from './ThemedText';
 interface ButtonProps {
   onPress?: () => void;
@@ -12,6 +12,8 @@ interface ButtonProps {
   icon?: React.ReactNode;
   children: React.ReactNode;
   href?: string;
+  isLoading?: boolean;
+  disabled?: boolean;
 }
 export const Button: React.FC<ButtonProps> = ({
   onPress,
@@ -19,6 +21,8 @@ export const Button: React.FC<ButtonProps> = ({
   icon,
   children,
   href,
+  isLoading = false,
+  disabled = false,
 }) => {
   const theme = useColorScheme() ?? 'light';
 
@@ -65,6 +69,7 @@ export const Button: React.FC<ButtonProps> = ({
         marginHorizontal: 'auto',
         ...style,
       }}
+      disabled={isLoading}
       onPress={onPress}
     >
       <ThemedText
@@ -75,8 +80,17 @@ export const Button: React.FC<ButtonProps> = ({
           gap: 5,
         }}
       >
-        {icon}
-        {children}
+        {isLoading ? (
+          <ActivityIndicator
+            size="small"
+            color={theme === 'light' ? Colors.dark.text : Colors.light.text}
+          />
+        ) : (
+          <>
+            {icon}
+            {children}
+          </>
+        )}
       </ThemedText>
     </TouchableOpacity>
   );

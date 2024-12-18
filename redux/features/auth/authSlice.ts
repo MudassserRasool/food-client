@@ -26,6 +26,13 @@ const removeTokenFromStorage = async () => {
     console.error('Failed to remove the token from storage:', error);
   }
 };
+const removeRoleFromStorage = async () => {
+  try {
+    await AsyncStorage.removeItem('role');
+  } catch (error) {
+    console.error('Failed to remove the role from storage:', error);
+  }
+};
 
 const getTokenFromStorage = async () => {
   try {
@@ -33,6 +40,16 @@ const getTokenFromStorage = async () => {
     return token || null;
   } catch (error) {
     console.error('Failed to retrieve the token from storage:', error);
+    return null;
+  }
+};
+
+const getRoleFromStorage = async () => {
+  try {
+    const role = await AsyncStorage.getItem('role');
+    return role || null;
+  } catch (error) {
+    console.error('Failed to retrieve the role from storage:', error);
     return null;
   }
 };
@@ -51,7 +68,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action) => {
-      const { user, token, role } = action.payload;
+      const { token, role } = action.payload;
       state.token = token;
       state.role = role;
 
@@ -63,11 +80,13 @@ const authSlice = createSlice({
       state.token = null;
       state.role = null;
 
-      // Remove the token from AsyncStorage
       removeTokenFromStorage();
+      removeRoleFromStorage();
     },
     initializeToken: (state, action) => {
-      state.token = action.payload; // Populate token from AsyncStorage
+      const { token, role } = action.payload;
+      state.token = token;
+      state.role = role;
     },
   },
 });
@@ -77,7 +96,9 @@ export const { setCredentials, logout, initializeToken } = authSlice.actions;
 // Thunk to initialize token from AsyncStorage
 export const initializeAuth = () => async (dispatch: Dispatch) => {
   const token = await getTokenFromStorage();
-  dispatch(initializeToken(token));
+  const role = await getRoleFromStorage();
+  // dispatch(setCredentials({ token, role }));
+  dispatch(initializeToken({ token, role }));
 };
 
 export default authSlice.reducer;

@@ -2,18 +2,75 @@ import { Button } from '@/components/Button';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import ToastNotification from '@/components/ToastNotification/ToastNotification';
 import ROUTES from '@/constants/routes';
+import {
+  useResendOtpMutation,
+  useVerifyOtpMutation,
+  useVerifyResendOtpMutation,
+} from '@/redux/features/auth/authApi';
+import { setCredentials } from '@/redux/features/auth/authSlice';
 import globalStyle from '@/style/globalStyle';
 import { useLocalSearchParams, useRouter } from 'expo-router/build/hooks';
 import React from 'react';
 import { OtpInput } from 'react-native-otp-entry';
+import { useDispatch } from 'react-redux';
 import styles from './OtpVerification.style';
 
 const OtpVerification = () => {
-  const { type, data } = useLocalSearchParams();
-  const router = useRouter();
+  const { verificationMethod, data, verificationType } = useLocalSearchParams();
+  const [verifyOtp, { isLoading: verificationLoading }] =
+    useVerifyOtpMutation();
+  const [resendOtp, { isLoading: resendOtpLoading }] = useResendOtpMutation();
+  const [verifyResendOtp, { isLoading: verifyResendOtpLoading }] =
+    useVerifyResendOtpMutation();
 
-  const handelResendOtp = async () => {};
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const handelResendOtp = async () => {
+    try {
+      const response = await resendOtp(data);
+      if (response.data?.status === 'success') {
+        ToastNotification.success(response?.data?.message, 'Otp sent');
+      } else {
+        console.log(response);
+        throw new Error(response?.error?.data?.message);
+      }
+    } catch (error) {
+      ToastNotification.error(error.message, 'Otp resend failed');
+    }
+  };
+
+  const handelVerifyOtp = async (otp) => {
+    const payload = {
+      otp,
+      email: data,
+    };
+    try {
+      const response =
+        verificationType === 'signupVerification'
+          ? await verifyOtp(payload)
+          : await verifyResendOtp(payload);
+      if (response.data?.status === 'success') {
+        ToastNotification.success(response?.data?.message, 'Otp verified');
+        if (verificationType === 'signupVerification') {
+          dispatch(setCredentials(response.data.data));
+        } else {
+          router.push(ROUTES.RESET_PASSWORD);
+          router.setParams({
+            verificationMethod,
+            data,
+            otp,
+          });
+        }
+      } else {
+        throw new Error(response?.error?.data?.message);
+      }
+    } catch (error) {
+      ToastNotification.error(error.message, 'Otp verification failed');
+    }
+  };
   return (
     <ParallaxScrollView>
       <ThemedView style={globalStyle.authCenteredContent}>
@@ -25,7 +82,7 @@ const OtpVerification = () => {
             textTransform: 'uppercase',
           }}
         >
-          CHECK YOUR {type} FOR OTP
+          CHECK YOUR {verificationMethod} FOR OTP
         </ThemedText>
         <ThemedText
           type="gray"
@@ -40,7 +97,7 @@ const OtpVerification = () => {
 
         <ThemedView>
           <OtpInput
-            numberOfDigits={6}
+            numberOfDigits={4}
             focusColor="green"
             autoFocus={false}
             hideStick={true}
@@ -53,7 +110,7 @@ const OtpVerification = () => {
             onFocus={() => console.log('Focused')}
             onBlur={() => console.log('Blurred')}
             onTextChange={(text) => console.log(text)}
-            onFilled={(text) => console.log(`OTP is ${text}`)}
+            onFilled={(text) => handelVerifyOtp(text)}
             textInputProps={{
               accessibilityLabel: 'One-Time Password',
             }}
@@ -78,7 +135,7 @@ const OtpVerification = () => {
           onPress={() => {
             router.push(ROUTES.RESET_PASSWORD);
             router.setParams({
-              type,
+              verificationMethod,
               data,
             });
           }}

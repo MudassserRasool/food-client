@@ -1,52 +1,172 @@
-import { Image, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 
+import { Button } from '@/components/Button';
+import CategoryOption from '@/components/home/CategoryOption';
+import HotDeal from '@/components/home/HotDeal';
+import OfferCard from '@/components/home/OfferCard';
+import ProductCard from '@/components/home/ProductCard';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import ROUTES from '@/constants/routes';
+import { logout } from '@/redux/features/auth/authSlice';
+import globalStyle from '@/style/globalStyle';
+import { useRouter } from 'expo-router';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 export default function HomeScreen() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const handleAddToCart = () => {
+    console.log('jjjj');
+  };
+
+  const ccdata = [
+    {
+      id: '1',
+      imageUrl:
+        'https://media.istockphoto.com/id/1442417585/photo/person-getting-a-piece-of-cheesy-pepperoni-pizza.jpg?s=612x612&w=0&k=20&c=k60TjxKIOIxJpd4F4yLMVjsniB4W1BpEV4Mi_nb4uJU=',
+      label: 'Pepperoni',
+    },
+    {
+      id: '2',
+      imageUrl:
+        'https://media.istockphoto.com/id/1442417585/photo/person-getting-a-piece-of-cheesy-pepperoni-pizza.jpg?s=612x612&w=0&k=20&c=k60TjxKIOIxJpd4F4yLMVjsniB4W1BpEV4Mi_nb4uJU=',
+      label: 'Pepperoni',
+    },
+    {
+      id: '3',
+      imageUrl:
+        'https://media.istockphoto.com/id/1442417585/photo/person-getting-a-piece-of-cheesy-pepperoni-pizza.jpg?s=612x612&w=0&k=20&c=k60TjxKIOIxJpd4F4yLMVjsniB4W1BpEV4Mi_nb4uJU=',
+      label: 'Pepperoni',
+    },
+  ];
+
+  const products = [
+    {
+      id: '1',
+      imageUrl:
+        'https://media.istockphoto.com/id/1442417585/photo/person-getting-a-piece-of-cheesy-pepperoni-pizza.jpg?s=612x612&w=0&k=20&c=k60TjxKIOIxJpd4F4yLMVjsniB4W1BpEV4Mi_nb4uJU=',
+      title: 'Beef Pepperoni',
+      price: '7.35',
+    },
+    {
+      id: '2',
+      imageUrl:
+        'https://media.istockphoto.com/id/1442417585/photo/person-getting-a-piece-of-cheesy-pepperoni-pizza.jpg?s=612x612&w=0&k=20&c=k60TjxKIOIxJpd4F4yLMVjsniB4W1BpEV4Mi_nb4uJU=',
+      title: 'Beef Pepperoni',
+      price: '7.35',
+    },
+    {
+      id: '3',
+      imageUrl:
+        'https://media.istockphoto.com/id/1442417585/photo/person-getting-a-piece-of-cheesy-pepperoni-pizza.jpg?s=612x612&w=0&k=20&c=k60TjxKIOIxJpd4F4yLMVjsniB4W1BpEV4Mi_nb4uJU=',
+      title: 'Beef Pepperoni',
+      price: '7.35',
+    },
+  ];
   return (
-    <ParallaxScrollView
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <ParallaxScrollView>
+      <ThemedView style={globalStyle.userLayout}>
+        <ThemedText type="title">Welcome Sarah!</ThemedText>
+        <ThemedText type="gray">Hungry? Explore Our Pizza Menu!</ThemedText>
+        <HotDeal
+          imageUrl="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg"
+          title="React Icon"
+          description="This is a description for the React logo."
         />
-      }
-    >
-      <ThemedText>-----------------home---------------</ThemedText>
-      <ThemedText>-----------------home---------------</ThemedText>
+        <ThemedText type="title">Categories</ThemedText>
 
-      <ThemedText>-----------------home---------------</ThemedText>
+        <FlatList
+          data={ccdata}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <CategoryOption imageUrl={item.imageUrl} label={item.label} />
+          )}
+          horizontal
+          contentContainerStyle={styles.list}
+          showsHorizontalScrollIndicator={false}
+        />
 
-      <ThemedText>-----------------home---------------</ThemedText>
+        <ThemedText type="title">Featured</ThemedText>
 
-      <ThemedText>-----------------home---------------</ThemedText>
+        <FlatList
+          data={products}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <ProductCard
+              imageUrl={item.imageUrl}
+              title={item.title}
+              price={item.price}
+            />
+          )}
+          horizontal
+          contentContainerStyle={styles.list}
+          showsHorizontalScrollIndicator={false}
+        />
 
-      <ThemedText>-----------------home---------------</ThemedText>
+        <ThemedText type="title">Recommended </ThemedText>
 
-      <ThemedText>-----------------home---------------</ThemedText>
+        <FlatList
+          data={products}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <ProductCard
+              imageUrl={item.imageUrl}
+              title={item.title}
+              price={item.price}
+            />
+          )}
+          horizontal
+          contentContainerStyle={styles.list}
+          showsHorizontalScrollIndicator={false}
+        />
 
-      <ThemedText>-----------------home---------------</ThemedText>
+        <ThemedText style={{ marginVertical: 10 }} type="title">
+          Special Offers
+        </ThemedText>
+
+        <OfferCard
+          imageUrl="https://media.istockphoto.com/id/1442417585/photo/person-getting-a-piece-of-cheesy-pepperoni-pizza.jpg?s=612x612&w=0&k=20&c=k60TjxKIOIxJpd4F4yLMVjsniB4W1BpEV4Mi_nb4uJU="
+          discount="50% OFF"
+          title="End Of Year Feast"
+          description="2 Cheese Pizza, 1 Fries, 1 Cold Drink"
+          price="12.35"
+          onAddToCart={handleAddToCart}
+        />
+      </ThemedView>
+
+      <Button
+        onPress={() => {
+          dispatch(logout());
+          router.replace(ROUTES.LOGIN);
+        }}
+      >
+        Logout
+      </Button>
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  list: {
+    paddingHorizontal: 10,
+    gap: 10,
+    overflow: 'hidden',
+  },
+  optionContainer: {
     alignItems: 'center',
-    gap: 8,
+    marginHorizontal: 10,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  label: {
+    marginTop: 5,
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });

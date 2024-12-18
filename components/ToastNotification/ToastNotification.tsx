@@ -12,7 +12,7 @@ const ToastNotification = {
   },
   error: (text2 = '', text1 = '') => {
     Toast.show({
-      position: 'top-center',
+      position: 'top-right',
       autoClose: 5000,
       text2,
       text1,

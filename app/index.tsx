@@ -16,18 +16,38 @@ const index = () => {
   console.log('role', role);
   useEffect(() => {
     dispatch(initializeAuth()); // Check for token on app load
-  }, [dispatch]);
+  }, [dispatch, token]);
+
   useEffect(() => {
-    if (token) {
+    // if (!router || !token) {
+    //   console.log('Navigating to LOGIN');
+    //  ;
+    //   return;
+    // }
+    console.log('token', token);
+    console.log(role);
+
+    if (token)
       if (token === gestToken && role === ROLES.GEST) {
-        return router.push(ROUTES.CUSTOMER_HOME);
+        console.log('Navigating to CUSTOMER_HOME as GEST');
+        setTimeout(() => {
+          router.replace(ROUTES.CUSTOMER_HOME);
+        }, 1000);
       } else if (role === ROLES.CUSTOMER && token !== gestToken) {
-        return router.push(ROUTES.CUSTOMER_HOME);
+        console.log('Navigating to CUSTOMER_HOME as CUSTOMER');
+        setTimeout(() => {
+          router.replace(ROUTES.CUSTOMER_HOME);
+        }, 1000);
       } else if (role === ROLES.RIDER && token !== gestToken) {
-        return router.push(ROUTES.RIDER_HOME);
+        setTimeout(() => {
+          router.replace(ROUTES.RIDER_HOME);
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          router.replace(ROUTES.LOGIN);
+        }, 1000);
       }
-    }
-  }, [token, role]);
+  }, [token, role, router]);
 
   return <StarterScreen />;
 };
@@ -52,3 +72,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
+
+// eas build -p android --profile preview
