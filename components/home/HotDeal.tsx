@@ -1,18 +1,22 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { ThemedText } from '../ThemedText';
+import { ThemedView } from '../ThemedView';
 
 const HotDealBanner = () => {
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       {/* Text Section */}
-      <View style={styles.textContainer}>
-        <Text style={styles.hotDealText}>HOT DEAL</Text>
-        <Text style={styles.subText}>2 Pizzas for the Price of 1!</Text>
-      </View>
+      <ThemedView style={styles.textContainer} type="primary">
+        <ThemedText type="primary">HOT DEAL</ThemedText>
+        <ThemedText style={styles.subText}>
+          2 Pizzas for the Price of 1!
+        </ThemedText>
+      </ThemedView>
 
       {/* Order Now Button */}
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Order Now</Text>
+        <ThemedText style={styles.buttonText}>Order Now</ThemedText>
       </TouchableOpacity>
 
       {/* Pizza Image */}
@@ -23,14 +27,14 @@ const HotDealBanner = () => {
         style={styles.pizzaImage}
         // resizeMode="contain"
       />
-    </View>
+    </ThemedView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FF8C32',
-    padding: 20,
+    padding: 15,
     borderRadius: 10,
     width: '100%',
     alignSelf: 'center',
@@ -46,7 +50,8 @@ const styles = StyleSheet.create({
     color: '#FFD700', // Bright yellow
     fontSize: 32,
     fontWeight: 'bold',
-    marginBottom: 10,
+    // marginBottom: 10,
+    // marginVertical: 100,
   },
   subText: {
     color: '#FFF',

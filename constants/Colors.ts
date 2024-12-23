@@ -35,6 +35,9 @@ export const Colors = {
     grayColor: '#666666',
     placeholder: '#999999',
     link: '#1976D2',
+    primaryBackground: '#FB9131',
+    primaryText: '#FFF12A',
+    cardBackground: '#fffff',
   },
   dark: {
     text: '#ECEDEE',
@@ -46,5 +49,8 @@ export const Colors = {
     grayColor: '#666666',
     placeholder: '#999999',
     link: '#1976D2',
+    primaryBackground: '#FB9131',
+    primaryText: '#FFF12A',
+    cardBackground: '#595853',
   },
 };

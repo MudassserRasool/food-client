@@ -1,58 +1,56 @@
+import FullScreenLoader from '@/components/FullScreenLoader';
 import { gestToken } from '@/constants';
 import ROLES from '@/constants/roles';
 import ROUTES from '@/constants/routes';
 import { initializeAuth } from '@/redux/features/auth/authSlice';
 import { useRouter } from 'expo-router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import StarterScreen from './auth/StarterScreen';
 
-const index = () => {
+const Index = () => {
   const { token, role } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const router = useRouter();
-  console.log('token', token);
-  console.log('role', role);
-  useEffect(() => {
-    dispatch(initializeAuth()); // Check for token on app load
-  }, [dispatch, token]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // if (!router || !token) {
-    //   console.log('Navigating to LOGIN');
-    //  ;
-    //   return;
-    // }
-    console.log('token', token);
-    console.log(role);
+    // Check for token on app load
+    const initialize = async () => {
+      setLoading(true); // Show loader
+      await dispatch(initializeAuth());
+      setLoading(false); // Hide loader after dispatch
+    };
+    initialize();
+  }, [dispatch]);
 
-    if (token)
+  useEffect(() => {
+    if (token) {
+      setLoading(true); // Show loader while processing navigation
       if (token === gestToken && role === ROLES.GEST) {
-        console.log('Navigating to CUSTOMER_HOME as GEST');
-        setTimeout(() => {
-          router.replace(ROUTES.CUSTOMER_HOME);
-        }, 1000);
+        setTimeout(() => router.replace(ROUTES.CUSTOMER_HOME), 50);
       } else if (role === ROLES.CUSTOMER && token !== gestToken) {
-        console.log('Navigating to CUSTOMER_HOME as CUSTOMER');
-        setTimeout(() => {
-          router.replace(ROUTES.CUSTOMER_HOME);
-        }, 1000);
+        setTimeout(() => router.replace(ROUTES.CUSTOMER_HOME), 50);
       } else if (role === ROLES.RIDER && token !== gestToken) {
-        setTimeout(() => {
-          router.replace(ROUTES.RIDER_HOME);
-        }, 1000);
+        setTimeout(() => router.replace(ROUTES.RIDER_HOME), 50);
       } else {
-        setTimeout(() => {
-          router.replace(ROUTES.LOGIN);
-        }, 1000);
+        setTimeout(() => router.replace(ROUTES.LOGIN), 50);
       }
+      setLoading(false); // Hide loader after navigation logic
+    }
   }, [token, role, router]);
+
+  if (loading) {
+    return (
+      <FullScreenLoader visible={true} message="Loading, please wait..." />
+    );
+  }
 
   return <StarterScreen />;
 };
 
-export default index;
+export default Index;
 
 const styles = StyleSheet.create({
   titleContainer: {

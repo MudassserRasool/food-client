@@ -1,23 +1,23 @@
 import { Image } from 'expo-image';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, useColorScheme } from 'react-native';
+import { ThemedText } from '../ThemedText';
+import { ThemedView } from '../ThemedView';
 
 const CategoryOption = ({ imageUrl, label }) => {
+  const themeColor = useColorScheme();
   return (
-    <View style={styles.card}>
+    <ThemedView style={styles.card} type="card">
       <Image source={{ uri: imageUrl }} style={styles.image} />
-      <Text style={styles.label}>{label}</Text>
-    </View>
+      <ThemedText type="gray">{label}</ThemedText>
+    </ThemedView>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    width: 120,
-    height: 150,
-    backgroundColor: '#fff',
+    padding: 19,
     borderRadius: 15,
-    paddingVertical: 15,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -25,10 +25,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 4,
+    // backgroundColor: '#595853',
   },
   image: {
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
     borderRadius: 50,
     marginBottom: 10,
   },

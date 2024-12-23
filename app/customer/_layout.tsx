@@ -17,6 +17,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
+
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
@@ -27,16 +28,16 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="Home"
+        name="Home/index"
         options={{
-          title: 'House',
+          title: 'Home',
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="house.fill" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="Cart"
+        name="Cart/index"
         options={{
           title: 'Cart',
           tabBarIcon: ({ color }) => (
@@ -44,9 +45,8 @@ export default function TabLayout() {
           ),
         }}
       />
-
       <Tabs.Screen
-        name="Order"
+        name="Order/index"
         options={{
           title: 'Order',
           tabBarIcon: ({ color }) => (
@@ -55,20 +55,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="user"
+        name="Profile/index"
         options={{
           title: '',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <IconSymbol size={28} name="person" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="options"
+        name="Chat/index"
         options={{
           title: '',
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+            <IconSymbol size={28} name="wechat" color={color} />
           ),
         }}
       />

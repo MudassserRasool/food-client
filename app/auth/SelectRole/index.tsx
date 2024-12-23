@@ -1,26 +1,38 @@
 import Images from '@/assets';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 import ROLES from '@/constants/roles';
 import ROUTES from '@/constants/routes';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from 'react-native';
 
 const SelectRole = () => {
   const router = useRouter();
+  const colorScheme = useColorScheme();
   return (
     <View style={styles.container}>
-      <Image source={Images.BlackLogo} style={styles.logo} />
+      <Image
+        source={colorScheme === 'light' ? Images.BlackLogo : Images.WhiteLogo}
+        style={styles.logo}
+      />
 
-      <View style={styles.headingContainer}>
-        <View style={styles.line} />
-        <Text style={styles.headingText}>LOGIN AS</Text>
-        <View style={styles.line} />
-      </View>
+      <ThemedView style={styles.headingContainer}>
+        <ThemedView style={styles.line} />
+        <ThemedText style={styles.headingText}>LOGIN AS</ThemedText>
+        <ThemedText style={styles.line} />
+      </ThemedView>
 
       <View style={styles.optionsContainer}>
         <TouchableOpacity
-          style={styles.card}
+          style={[styles.card, { backgroundColor: '#F5F5F5' }]}
           onPress={() => router.push(ROUTES.LOGIN)}
         >
           <Image source={Images.Customer} style={styles.icon} />
@@ -28,7 +40,7 @@ const SelectRole = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.card}
+          style={[styles.card, { backgroundColor: '#F5F5F5' }]}
           onPress={() => {
             router.push(ROUTES.LOGIN);
             router.setParams({
@@ -49,7 +61,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
   },
   logo: {
     width: 150,
@@ -71,7 +82,6 @@ const styles = StyleSheet.create({
   headingText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333333',
   },
   optionsContainer: {
     flexDirection: 'row',
@@ -79,7 +89,6 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   card: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',

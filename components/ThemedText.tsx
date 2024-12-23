@@ -7,7 +7,14 @@ import { StyleSheet, Text, type TextProps } from 'react-native';
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link' | 'gray';
+  type?:
+    | 'default'
+    | 'title'
+    | 'defaultSemiBold'
+    | 'subtitle'
+    | 'link'
+    | 'gray'
+    | 'primary'; // New prop for text type
   href?: string; // New prop for links
 };
 
@@ -31,6 +38,7 @@ export function ThemedText({
     type === 'subtitle' ? styles.subtitle : undefined,
     type === 'link' ? styles.link : undefined,
     type === 'gray' ? styles.gray : undefined,
+    type === 'primary' ? styles.primary : undefined,
     { fontFamily: 'Poppins' },
     style,
   ];
@@ -86,5 +94,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.light.link,
     textDecorationLine: 'underline',
+  },
+  primary: {
+    color: Colors.light.primaryText,
+    fontSize: 32,
+    fontWeight: '600',
   },
 });

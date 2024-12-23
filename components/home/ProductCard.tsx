@@ -1,13 +1,14 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import { ThemedText } from '../ThemedText';
 import { ThemedView } from '../ThemedView';
+import { IconSymbol } from '../ui/IconSymbol';
 
 const ProductCard = ({ imageUrl, title, price }) => {
+  const colorScheme = useColorScheme();
   return (
-    <ThemedView style={styles.card}>
+    <ThemedView style={styles.card} type="card">
       {/* Pizza Image */}
       <Image source={{ uri: imageUrl }} style={styles.image} />
 
@@ -15,9 +16,20 @@ const ProductCard = ({ imageUrl, title, price }) => {
       <ThemedText style={styles.title}>{title}</ThemedText>
 
       {/* Price and Icon */}
-      <ThemedView style={styles.footer}>
+      <ThemedView style={[styles.footer]} type="card">
         <ThemedText style={styles.price}>${price}</ThemedText>
-        <MaterialIcons name="lock" size={24} color="#333" />
+        <TouchableOpacity>
+          <IconSymbol
+            size={15}
+            name="shopping.basket"
+            style={{
+              color: '#ffff',
+              backgroundColor: 'black',
+              borderRadius: 50,
+              padding: 5,
+            }}
+          />
+        </TouchableOpacity>
       </ThemedView>
     </ThemedView>
   );
@@ -25,9 +37,8 @@ const ProductCard = ({ imageUrl, title, price }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
     borderRadius: 15,
-    width: 160,
+    width: 170,
     padding: 10,
     alignItems: 'center',
     shadowColor: '#000',
@@ -41,6 +52,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 10,
     marginBottom: 8,
+    resizeMode: 'cover',
   },
   title: {
     fontSize: 16,
@@ -59,6 +71,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#444',
   },
+  icon: {},
 });
 
 export default ProductCard;

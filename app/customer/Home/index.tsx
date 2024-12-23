@@ -27,19 +27,19 @@ export default function HomeScreen() {
       id: '1',
       imageUrl:
         'https://media.istockphoto.com/id/1442417585/photo/person-getting-a-piece-of-cheesy-pepperoni-pizza.jpg?s=612x612&w=0&k=20&c=k60TjxKIOIxJpd4F4yLMVjsniB4W1BpEV4Mi_nb4uJU=',
-      label: 'Pepperoni',
+      label: 'Classic',
     },
     {
       id: '2',
       imageUrl:
         'https://media.istockphoto.com/id/1442417585/photo/person-getting-a-piece-of-cheesy-pepperoni-pizza.jpg?s=612x612&w=0&k=20&c=k60TjxKIOIxJpd4F4yLMVjsniB4W1BpEV4Mi_nb4uJU=',
-      label: 'Pepperoni',
+      label: 'Veggie',
     },
     {
       id: '3',
       imageUrl:
         'https://media.istockphoto.com/id/1442417585/photo/person-getting-a-piece-of-cheesy-pepperoni-pizza.jpg?s=612x612&w=0&k=20&c=k60TjxKIOIxJpd4F4yLMVjsniB4W1BpEV4Mi_nb4uJU=',
-      label: 'Pepperoni',
+      label: 'Cheesy',
     },
   ];
 
@@ -66,6 +66,12 @@ export default function HomeScreen() {
       price: '7.35',
     },
   ];
+
+  // if (true) {
+  //   return (
+  //     <FullScreenLoader visible={true} message="Loading, please wait..." />
+  //   );
+  // }
   return (
     <ParallaxScrollView>
       <ThemedView style={globalStyle.userLayout}>
@@ -106,7 +112,7 @@ export default function HomeScreen() {
           showsHorizontalScrollIndicator={false}
         />
 
-        <ThemedText type="title">Recommended </ThemedText>
+        {/* <ThemedText type="title">Recommended </ThemedText>
 
         <FlatList
           data={products}
@@ -121,7 +127,7 @@ export default function HomeScreen() {
           horizontal
           contentContainerStyle={styles.list}
           showsHorizontalScrollIndicator={false}
-        />
+        /> */}
 
         <ThemedText style={{ marginVertical: 10 }} type="title">
           Special Offers
@@ -145,15 +151,16 @@ export default function HomeScreen() {
       >
         Logout
       </Button>
+      {/* <IconSymbol size={28} name="house.fill" color={'red'} /> */}
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   list: {
-    paddingHorizontal: 10,
-    gap: 10,
-    overflow: 'hidden',
+    paddingVertical: 10,
+    paddingHorizontal: 2,
+    gap: 15,
   },
   optionContainer: {
     alignItems: 'center',

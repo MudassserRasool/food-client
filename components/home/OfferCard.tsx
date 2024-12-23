@@ -1,5 +1,7 @@
+import { Image } from 'expo-image';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Button } from '../Button';
 import { ThemedText } from '../ThemedText';
 import { ThemedView } from '../ThemedView';
 
@@ -12,24 +14,36 @@ const OfferCard = ({
   onAddToCart,
 }) => {
   return (
-    <ThemedView style={styles.card}>
+    <ThemedView style={styles.card} type="card">
       {/* Image Section */}
       <ThemedView>
-        <Image source={{ uri: imageUrl }} style={styles.image} />
-        {discount && <Text style={styles.discountBadge}>{discount}</Text>}
+        <Image
+          source={{ uri: imageUrl }}
+          style={styles.image}
+          contentFit="cover"
+        />
+        {discount && (
+          <ThemedText style={styles.discountBadge}>{discount}</ThemedText>
+        )}
       </ThemedView>
 
       {/* Content Section */}
-      <ThemedView style={styles.content}>
+      <ThemedView style={styles.content} type="card">
         <ThemedText style={styles.title}>{title}</ThemedText>
         <ThemedText style={styles.description}>{description}</ThemedText>
 
         {/* Price and Button */}
-        <ThemedView style={styles.footer}>
+        <ThemedView style={styles.footer} type="card">
           <ThemedText style={styles.price}>${price}</ThemedText>
-          <TouchableOpacity style={styles.button} onPress={onAddToCart}>
-            <ThemedText style={styles.buttonText}>Add to Cart</ThemedText>
-          </TouchableOpacity>
+          <Button
+            style={{
+              width: '50%',
+              marginLeft: 90,
+            }}
+            onPress={onAddToCart}
+          >
+            Add to Cart
+          </Button>
         </ThemedView>
       </ThemedView>
     </ThemedView>
@@ -38,7 +52,6 @@ const OfferCard = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
     borderRadius: 15,
     overflow: 'hidden',
     elevation: 5,
@@ -46,7 +59,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
-    // margin: 10,
   },
   image: {
     width: '100%',
@@ -54,13 +66,11 @@ const styles = StyleSheet.create({
   },
   discountBadge: {
     position: 'absolute',
-    top: 10,
-    left: 10,
     backgroundColor: '#FF8500',
     color: '#fff',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 5,
+    borderBottomRightRadius: 5,
     fontWeight: 'bold',
   },
   content: {
@@ -85,10 +95,8 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
   },
   button: {
-    backgroundColor: '#000',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

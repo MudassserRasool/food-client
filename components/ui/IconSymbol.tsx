@@ -15,6 +15,10 @@ const MAPPING = {
   'chevron.left': 'chevron-left',
   'bag.fill': 'shopping-bag',
   orders: 'my-library-books',
+  'shopping.basket': 'shopping-basket',
+  'library.books': 'library-books',
+  person: 'person',
+  wechat: 'wechat',
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'],
