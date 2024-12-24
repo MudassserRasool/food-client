@@ -11,40 +11,47 @@ import StarterScreen from './auth/StarterScreen';
 
 const Index = () => {
   const { token, role } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
+  // Handle initial authentication check
   useEffect(() => {
-    // Check for token on app load
     const initialize = async () => {
-      setLoading(true); // Show loader
-      await dispatch(initializeAuth());
-      setLoading(false); // Hide loader after dispatch
+      try {
+        await dispatch(initializeAuth());
+      } catch (error) {
+        console.error('Failed to initialize auth:', error);
+      } finally {
+        setLoading(false);
+      }
     };
     initialize();
   }, [dispatch]);
 
+  // Handle navigation based on auth state
   useEffect(() => {
+    let targetRoute = ROUTES.LOGIN; // Default route
+
     if (token) {
-      setLoading(true); // Show loader while processing navigation
       if (token === gestToken && role === ROLES.GEST) {
-        setTimeout(() => router.replace(ROUTES.CUSTOMER_HOME), 50);
+        targetRoute = ROUTES.CUSTOMER_HOME;
       } else if (role === ROLES.CUSTOMER && token !== gestToken) {
-        setTimeout(() => router.replace(ROUTES.CUSTOMER_HOME), 50);
+        targetRoute = ROUTES.CUSTOMER_HOME;
       } else if (role === ROLES.RIDER && token !== gestToken) {
-        setTimeout(() => router.replace(ROUTES.RIDER_HOME), 50);
-      } else {
-        setTimeout(() => router.replace(ROUTES.LOGIN), 50);
+        targetRoute = ROUTES.RIDER_HOME;
       }
-      setLoading(false); // Hide loader after navigation logic
+
+      try {
+        router.replace(targetRoute);
+      } catch (error) {
+        console.error('Navigation failed:', error);
+      }
     }
   }, [token, role, router]);
 
   if (loading) {
-    return (
-      <FullScreenLoader visible={true} message="Loading, please wait..." />
-    );
+    return <FullScreenLoader visible={true} message="Initializing app..." />;
   }
 
   return <StarterScreen />;
